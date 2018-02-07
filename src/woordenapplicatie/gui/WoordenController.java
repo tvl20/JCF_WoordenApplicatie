@@ -15,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import woordenapplicatie.logic.AppLogic;
+import woordenapplicatie.logic.ILogic;
 
 /**
  * FXML Controller class
@@ -23,6 +25,7 @@ import javafx.scene.control.TextArea;
  */
 public class WoordenController implements Initializable
 {
+    private ILogic logic = new AppLogic();
 
     private static final String DEFAULT_TEXT = "Een, twee, drie, vier\n" +
             "Hoedje van, hoedje van\n" +
@@ -66,7 +69,12 @@ public class WoordenController implements Initializable
     @FXML
     private void aantalAction(ActionEvent event)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int[] wordCount = logic.getWordCount(taInput.getText());
+
+        String output = "Totaal aantal woorden:         " + Integer.toString(wordCount[0]);
+        output += "\nAaantal verschillende woorden: " + Integer.toString(wordCount[1]);
+
+        taOutput.setText(output);
     }
 
     @FXML
