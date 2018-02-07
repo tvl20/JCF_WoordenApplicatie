@@ -8,6 +8,7 @@ package woordenapplicatie.gui;
 
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -69,18 +70,13 @@ public class WoordenController implements Initializable
     @FXML
     private void aantalAction(ActionEvent event)
     {
-        int[] wordCount = logic.getWordCount(taInput.getText());
-
-        String output = "Totaal aantal woorden:         " + Integer.toString(wordCount[0]);
-        output += "\nAaantal verschillende woorden: " + Integer.toString(wordCount[1]);
-
-        taOutput.setText(output);
+        taOutput.setText(logic.getWordCount(taInput.getText()));
     }
 
     @FXML
     private void sorteerAction(ActionEvent event)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        taOutput.setText(logic.getWordsSorted(taInput.getText()));
     }
 
     @FXML

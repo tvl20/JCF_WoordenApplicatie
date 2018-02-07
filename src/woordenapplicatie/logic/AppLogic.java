@@ -1,30 +1,44 @@
 package woordenapplicatie.logic;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AppLogic implements ILogic
 {
 
     private String[] splitString(String original)
     {
-        original.toLowerCase();
-        return original.split("[,\n ]+");
+        return original.toLowerCase().split("[,\n ]+");
     }
 
     @Override
-    public int[] getWordCount(String input)
+    public String getWordCount(String input)
     {
         List<String> allWords = Arrays.asList(splitString(input));
-
-        int[] result = new int[2];
-        result[0] = allWords.size();
+        String output = "Totaal aantal woorden:         " + Integer.toString(allWords.size());
 
         HashSet<String> differentWords = new HashSet<>(allWords);
-        result[1] = differentWords.size();
+        output += "\nAaantal verschillende woorden: " + Integer.toString(differentWords.size());
 
-        return result;
+        return output;
+    }
+
+    @Override
+    public String getWordsSorted(String input)
+    {
+        TreeSet<String> differentWords = new TreeSet<>(Arrays.asList(splitString(input)));
+
+        StringBuilder outputString = new StringBuilder();
+        for (String word : differentWords.descendingSet())
+        {
+            outputString.append(word).append("\n");
+        }
+
+        return outputString.toString();
+    }
+
+    @Override
+    public String getWordFrequency(String input)
+    {
+        return null;
     }
 }
