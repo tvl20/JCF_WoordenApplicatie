@@ -39,6 +39,39 @@ public class AppLogic implements ILogic
     @Override
     public String getWordFrequency(String input)
     {
-        return null;
+        String[] allWords = splitString(input);
+
+        HashMap<String, Integer> wordFrequency = new HashMap<>();
+        // insert the words into the map/dictionary
+        for (String word : allWords)
+        {
+            // if it already exists add 1 to the value
+            // else just add the word to the map/dictionary as a new word
+            if (wordFrequency.containsKey(word))
+            {
+                wordFrequency.replace(word, wordFrequency.get(word)+1);
+            }
+            else
+            {
+                wordFrequency.put(word, 1);
+            }
+        }
+
+        // sort the map/dictionary by value
+        List<Map.Entry<String, Integer>> entries = new LinkedList<>(wordFrequency.entrySet());
+
+        // this line can be changed to Comparator.comparing() but this is more readable for me
+        entries.sort((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+
+
+        // create the output String
+        StringBuilder output = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : entries)
+        {
+            output.append(entry.getKey()).append(": ");
+            output.append(entry.getValue()).append("\n");
+        }
+
+        return output.toString();
     }
 }

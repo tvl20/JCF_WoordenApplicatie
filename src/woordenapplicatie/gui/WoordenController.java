@@ -82,7 +82,7 @@ public class WoordenController implements Initializable
     @FXML
     private void frequentieAction(ActionEvent event)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        taOutput.setText(logic.getWordFrequency(taInput.getText()));
     }
 
     @FXML
