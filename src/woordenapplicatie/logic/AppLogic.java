@@ -13,11 +13,24 @@ public class AppLogic implements ILogic
     @Override
     public String getWordCount(String input)
     {
-        List<String> allWords = Arrays.asList(splitString(input));
-        String output = "Totaal aantal woorden:         " + Integer.toString(allWords.size());
+        TimeStamp calculatingTimeStamp = new TimeStamp();
+        calculatingTimeStamp.setBegin();
 
+        List<String> allWords = Arrays.asList(splitString(input));
         HashSet<String> differentWords = new HashSet<>(allWords);
+
+        calculatingTimeStamp.setEnd();
+        System.out.println("Time to complete calculating: " + calculatingTimeStamp.toString());
+
+
+        TimeStamp stringFormattingTimeStamp = new TimeStamp();
+        stringFormattingTimeStamp.setBegin();
+
+        String output = "Totaal aantal woorden:         " + Integer.toString(allWords.size());
         output += "\nAaantal verschillende woorden: " + Integer.toString(differentWords.size());
+
+        stringFormattingTimeStamp.setEnd();
+        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
 
         return output;
     }
@@ -25,7 +38,17 @@ public class AppLogic implements ILogic
     @Override
     public String getWordsSorted(String input)
     {
+        TimeStamp calculatingTimeStamp = new TimeStamp();
+        calculatingTimeStamp.setBegin();
+
         TreeSet<String> differentWords = new TreeSet<>(Arrays.asList(splitString(input)));
+
+        calculatingTimeStamp.setEnd();
+        System.out.println(calculatingTimeStamp.toString());
+
+
+        TimeStamp stringFormattingTimeStamp = new TimeStamp();
+        stringFormattingTimeStamp.setBegin();
 
         StringBuilder outputString = new StringBuilder();
         for (String word : differentWords.descendingSet())
@@ -33,12 +56,18 @@ public class AppLogic implements ILogic
             outputString.append(word).append("\n");
         }
 
+        stringFormattingTimeStamp.setEnd();
+        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
+
         return outputString.toString();
     }
 
     @Override
     public String getWordFrequency(String input)
     {
+        TimeStamp calculatingTimeStamp = new TimeStamp();
+        calculatingTimeStamp.setBegin();
+
         String[] allWords = splitString(input);
 
         HashMap<String, Integer> wordFrequency = new HashMap<>();
@@ -60,9 +89,14 @@ public class AppLogic implements ILogic
         // sort the map/dictionary by value
         List<Map.Entry<String, Integer>> entries = new LinkedList<>(wordFrequency.entrySet());
 
-        // this line can be changed to Comparator.comparing() but this is more readable for me
-        entries.sort((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        entries.sort(Comparator.comparing(Map.Entry::getValue));
 
+        calculatingTimeStamp.setEnd();
+        System.out.println(calculatingTimeStamp.toString());
+
+
+        TimeStamp stringFormattingTimeStamp = new TimeStamp();
+        stringFormattingTimeStamp.setBegin();
 
         // create the output String
         StringBuilder output = new StringBuilder();
@@ -72,12 +106,18 @@ public class AppLogic implements ILogic
             output.append(entry.getValue()).append("\n");
         }
 
+        stringFormattingTimeStamp.setEnd();
+        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
+
         return output.toString();
     }
 
     @Override
     public String getWordConcordance(String input)
     {
+        TimeStamp calculatingTimeStamp = new TimeStamp();
+        calculatingTimeStamp.setBegin();
+
         HashMap<String, HashSet<Integer>> resultMap = new HashMap<>();
         int lineCount = 1;
 
@@ -100,10 +140,10 @@ public class AppLogic implements ILogic
                 // If it has been added previously, add an row number to the list
                 if (resultMap.containsKey(word))
                 {
-                    HashSet<Integer> occurances = resultMap.get(word);
-                    occurances.add(lineCount);
+                    HashSet<Integer> occurrences = resultMap.get(word);
+                    occurrences.add(lineCount);
 
-                    resultMap.replace(word, occurances);
+                    resultMap.replace(word, occurrences);
                 }
                 // If it is a new word, add it to the list
                 else
@@ -114,14 +154,21 @@ public class AppLogic implements ILogic
             lineCount++;
         }
 
+        calculatingTimeStamp.setEnd();
+        System.out.println(calculatingTimeStamp.toString());
+
+
+        TimeStamp stringFormattingTimeStamp = new TimeStamp();
+        stringFormattingTimeStamp.setBegin();
+
         Set<String> allWords = resultMap.keySet();
         StringBuilder outputString = new StringBuilder();
         for (String word : allWords)
         {
             outputString.append(word).append(" [");
 
-            Set<Integer> lineOccurances = resultMap.get(word);
-            for (Integer lineNumber : lineOccurances)
+            Set<Integer> lineOccurrences = resultMap.get(word);
+            for (Integer lineNumber : lineOccurrences)
             {
                 outputString.append(lineNumber).append(",");
             }
@@ -131,6 +178,9 @@ public class AppLogic implements ILogic
 
             outputString.append("]\n");
         }
+
+        stringFormattingTimeStamp.setEnd();
+        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
 
         return outputString.toString();
     }
