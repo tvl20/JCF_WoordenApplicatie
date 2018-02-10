@@ -88,7 +88,7 @@ public class WoordenController implements Initializable
     @FXML
     private void concordatieAction(ActionEvent event)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        taOutput.setText(logic.getWordConcordance(taInput.getText()));
     }
 
 }

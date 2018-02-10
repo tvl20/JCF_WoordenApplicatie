@@ -1,6 +1,8 @@
 package woordenapplicatie.logic;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public interface ILogic
 {
@@ -9,4 +11,6 @@ public interface ILogic
     String getWordsSorted(String input);
 
     String getWordFrequency(String input);
+
+    String getWordConcordance(String input);
 }
