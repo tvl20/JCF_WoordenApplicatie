@@ -13,24 +13,11 @@ public class AppLogic implements ILogic
     @Override
     public String getWordCount(String input)
     {
-        TimeStamp calculatingTimeStamp = new TimeStamp();
-        calculatingTimeStamp.setBegin();
-
         List<String> allWords = Arrays.asList(splitString(input));
         HashSet<String> differentWords = new HashSet<>(allWords);
 
-        calculatingTimeStamp.setEnd();
-        System.out.println("Time to complete calculating: " + calculatingTimeStamp.toString());
-
-
-        TimeStamp stringFormattingTimeStamp = new TimeStamp();
-        stringFormattingTimeStamp.setBegin();
-
         String output = "Totaal aantal woorden:         " + Integer.toString(allWords.size());
         output += "\nAaantal verschillende woorden: " + Integer.toString(differentWords.size());
-
-        stringFormattingTimeStamp.setEnd();
-        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
 
         return output;
     }
@@ -38,17 +25,7 @@ public class AppLogic implements ILogic
     @Override
     public String getWordsSorted(String input)
     {
-        TimeStamp calculatingTimeStamp = new TimeStamp();
-        calculatingTimeStamp.setBegin();
-
         TreeSet<String> differentWords = new TreeSet<>(Arrays.asList(splitString(input)));
-
-        calculatingTimeStamp.setEnd();
-        System.out.println(calculatingTimeStamp.toString());
-
-
-        TimeStamp stringFormattingTimeStamp = new TimeStamp();
-        stringFormattingTimeStamp.setBegin();
 
         StringBuilder outputString = new StringBuilder();
         for (String word : differentWords.descendingSet())
@@ -56,18 +33,12 @@ public class AppLogic implements ILogic
             outputString.append(word).append("\n");
         }
 
-        stringFormattingTimeStamp.setEnd();
-        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
-
         return outputString.toString();
     }
 
     @Override
     public String getWordFrequency(String input)
     {
-        TimeStamp calculatingTimeStamp = new TimeStamp();
-        calculatingTimeStamp.setBegin();
-
         String[] allWords = splitString(input);
 
         HashMap<String, Integer> wordFrequency = new HashMap<>();
@@ -91,13 +62,6 @@ public class AppLogic implements ILogic
 
         entries.sort(Comparator.comparing(Map.Entry::getValue));
 
-        calculatingTimeStamp.setEnd();
-        System.out.println(calculatingTimeStamp.toString());
-
-
-        TimeStamp stringFormattingTimeStamp = new TimeStamp();
-        stringFormattingTimeStamp.setBegin();
-
         // create the output String
         StringBuilder output = new StringBuilder();
         for (Map.Entry<String, Integer> entry : entries)
@@ -106,18 +70,12 @@ public class AppLogic implements ILogic
             output.append(entry.getValue()).append("\n");
         }
 
-        stringFormattingTimeStamp.setEnd();
-        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
-
         return output.toString();
     }
 
     @Override
     public String getWordConcordance(String input)
     {
-        TimeStamp calculatingTimeStamp = new TimeStamp();
-        calculatingTimeStamp.setBegin();
-
         HashMap<String, HashSet<Integer>> resultMap = new HashMap<>();
         int lineCount = 1;
 
@@ -154,13 +112,6 @@ public class AppLogic implements ILogic
             lineCount++;
         }
 
-        calculatingTimeStamp.setEnd();
-        System.out.println(calculatingTimeStamp.toString());
-
-
-        TimeStamp stringFormattingTimeStamp = new TimeStamp();
-        stringFormattingTimeStamp.setBegin();
-
         Set<String> allWords = resultMap.keySet();
         StringBuilder outputString = new StringBuilder();
         for (String word : allWords)
@@ -178,9 +129,6 @@ public class AppLogic implements ILogic
 
             outputString.append("]\n");
         }
-
-        stringFormattingTimeStamp.setEnd();
-        System.out.println("Time to complete String formatting: " + stringFormattingTimeStamp.toString());
 
         return outputString.toString();
     }
