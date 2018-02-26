@@ -11,8 +11,10 @@ public class AppLogic implements ILogic
     }
 
     @Override
-    public String getWordCount(String input)
+    public String getWordCount(String input) // O(n^2)
     {
+        // O(n) for each item in the list:
+        // O(n^2)
         List<String> allWords = Arrays.asList(splitString(input));
         HashSet<String> differentWords = new HashSet<>(allWords);
 
@@ -23,11 +25,15 @@ public class AppLogic implements ILogic
     }
 
     @Override
-    public String getWordsSorted(String input)
+    public String getWordsSorted(String input) // O(2 * (n * Log(n)))
     {
+        // O(Log(n)) for each item in the list:
+        // O(n * Log(n))
         TreeSet<String> differentWords = new TreeSet<>(Arrays.asList(splitString(input)));
 
         StringBuilder outputString = new StringBuilder();
+        // O(Log(n)) for each item in the list:
+        // O(n * Log(n))
         for (String word : differentWords.descendingSet())
         {
             outputString.append(word).append("\n");
@@ -37,27 +43,33 @@ public class AppLogic implements ILogic
     }
 
     @Override
-    public String getWordFrequency(String input)
+    public String getWordFrequency(String input) // 2n^2??
     {
         String[] allWords = splitString(input);
 
         HashMap<String, Integer> wordFrequency = new HashMap<>();
+
         // insert the words into the map/dictionary
+        // for n loop?
+        // if so; n*2n or n*n; so 2n^2 or n^2 ?
         for (String word : allWords)
         {
             // if it already exists add 1 to the value
             // else just add the word to the map/dictionary as a new word
             if (wordFrequency.containsKey(word))
             {
-                wordFrequency.replace(word, wordFrequency.get(word)+1);
+                // O(n) + O(n) = O(2n)
+                wordFrequency.replace(word, wordFrequency.get(word) + 1);
             }
             else
             {
+                // O(n)
                 wordFrequency.put(word, 1);
             }
         }
 
         // sort the map/dictionary by value
+        // O(2n)? because you are taking one item from one list and adding it to another
         List<Map.Entry<String, Integer>> entries = new LinkedList<>(wordFrequency.entrySet());
 
         entries.sort(Comparator.comparing(Map.Entry::getValue));
@@ -82,6 +94,8 @@ public class AppLogic implements ILogic
         // Split the input by lines
         String[] lines = input.split("\n");
 
+        // One big for n loop
+        // Either n * 3n or n*n; so 3n^2 or n^2
         for (String line : lines)
         {
             // Split every line by words
@@ -96,16 +110,21 @@ public class AppLogic implements ILogic
                 }
 
                 // If it has been added previously, add an row number to the list
+                // Either O(3n) or O(n)
                 if (resultMap.containsKey(word))
                 {
+                    // O(n)
                     HashSet<Integer> occurrences = resultMap.get(word);
+                    // O(n)
                     occurrences.add(lineCount);
 
+                    // O(n)
                     resultMap.replace(word, occurrences);
                 }
                 // If it is a new word, add it to the list
                 else
                 {
+                    // O(n)
                     resultMap.put(word, new HashSet<Integer>(Collections.singletonList(lineCount)));
                 }
             }
@@ -125,7 +144,7 @@ public class AppLogic implements ILogic
             }
 
             // This is just to remove the ',' behind the last number
-            outputString.deleteCharAt(outputString.length() -1);
+            outputString.deleteCharAt(outputString.length() - 1);
 
             outputString.append("]\n");
         }
