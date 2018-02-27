@@ -50,8 +50,8 @@ public class AppLogic implements ILogic
         HashMap<String, Integer> wordFrequency = new HashMap<>();
 
         // insert the words into the map/dictionary
-        // for n loop?
-        // if so; n*2n or n*n; so 2n^2 or n^2 ?
+        // for n loop
+        // so 2n^2
         for (String word : allWords)
         {
             // if it already exists add 1 to the value
@@ -69,7 +69,7 @@ public class AppLogic implements ILogic
         }
 
         // sort the map/dictionary by value
-        // O(2n)? because you are taking one item from one list and adding it to another
+        // O(2n)
         List<Map.Entry<String, Integer>> entries = new LinkedList<>(wordFrequency.entrySet());
 
         entries.sort(Comparator.comparing(Map.Entry::getValue));
@@ -95,7 +95,7 @@ public class AppLogic implements ILogic
         String[] lines = input.split("\n");
 
         // One big for n loop
-        // Either n * 3n or n*n; so 3n^2 or n^2
+        // 3n^2
         for (String line : lines)
         {
             // Split every line by words
@@ -110,7 +110,7 @@ public class AppLogic implements ILogic
                 }
 
                 // If it has been added previously, add an row number to the list
-                // Either O(3n) or O(n)
+                // Either O(3n)
                 if (resultMap.containsKey(word))
                 {
                     // O(n)
