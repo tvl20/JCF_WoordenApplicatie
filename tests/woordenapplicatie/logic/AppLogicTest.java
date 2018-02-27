@@ -1,12 +1,10 @@
 package woordenapplicatie.logic;
 
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -14,118 +12,89 @@ public class AppLogicTest
 {
     private ILogic testLogic;
 
-    private String string10k;
-    private String string1m;
-
     @Before
     public void setUp() throws Exception
     {
         testLogic = new AppLogic();
-        string10k = generateString(10000);
-        string1m = generateString(1000000);
     }
 
     @Test
     public void getWordCount() throws Exception
     {
-        System.out.println("Word count test");
+        String countString = "Dit is een test string, for a test thing";
+        Integer[] counts = testLogic.getWordCount(countString);
 
-        System.out.println("10k");
-        long start10k = System.currentTimeMillis();
-        testLogic.getWordCount(string10k);
-        visualise(10000, start10k);
-
-        System.out.println("1m");
-        long start1m = System.currentTimeMillis();
-        testLogic.getWordCount(string1m);
-        visualise(1000000, start1m);
-
-        System.out.println("----------------------------");
+        Assert.assertTrue("Total word count doesn't match", 9 == counts[0]);
+        Assert.assertTrue("Total unique word count doesn't match", 8 == counts[1]);
     }
 
     @Test
     public void getWordsSorted() throws Exception
     {
-        System.out.println("Word sort test");
+        String sortedString = "c b d a";
+        TreeSet<String> sortedSet = testLogic.getWordsSorted(sortedString);
 
-        System.out.println("10k");
-        long start10k = System.currentTimeMillis();
-        testLogic.getWordsSorted(string10k);
-        visualise(10000, start10k);
-
-        System.out.println("1m");
-        long start1m = System.currentTimeMillis();
-        testLogic.getWordsSorted(string1m);
-        visualise(1000000, start1m);
-
-        System.out.println("----------------------------");
+        Assert.assertTrue(sortedSet.pollFirst().equals("a"));
+        Assert.assertTrue(sortedSet.pollFirst().equals("b"));
+        Assert.assertTrue(sortedSet.pollFirst().equals("c"));
+        Assert.assertTrue(sortedSet.pollFirst().equals("d"));
     }
 
     @Test
     public void getWordFrequency() throws Exception
     {
-        System.out.println("Word frequency test");
+        String frequencyString = "three two three one two three";
+        List<Map.Entry<String, Integer>> entries = testLogic.getWordFrequency(frequencyString);
 
-        System.out.println("10k");
-        long start10k = System.currentTimeMillis();
-        testLogic.getWordFrequency(string10k);
-        visualise(10000, start10k);
-
-        System.out.println("1m");
-        long start1m = System.currentTimeMillis();
-        testLogic.getWordFrequency(string1m);
-        visualise(1000000, start1m);
-
-        System.out.println("----------------------------");
+        for (Map.Entry<String, Integer> entry : entries)
+        {
+            switch(entry.getKey())
+            {
+                case "one":
+                    Assert.assertTrue(entry.getValue() == 1);
+                    break;
+                case "two":
+                    Assert.assertTrue(entry.getValue() == 2);
+                    break;
+                case "three":
+                    Assert.assertTrue(entry.getValue() == 3);
+                    break;
+                default:
+                    Assert.fail();
+            }
+        }
     }
 
     @Test
     public void getWordConcordance() throws Exception
     {
-        System.out.println("Word concordance test");
+        String concordanceString = "three two \n" +
+                                " three one two three";
 
-        System.out.println("10k");
-        long start10k = System.currentTimeMillis();
-        testLogic.getWordConcordance(string10k);
-        visualise(10000, start10k);
+        HashMap<String, HashSet<Integer>> concordance = testLogic.getWordConcordance(concordanceString);
 
-        System.out.println("1m");
-        long start1m = System.currentTimeMillis();
-        testLogic.getWordConcordance(string1m);
-        visualise(1000000, start1m);
-
-        System.out.println("----------------------------");
-    }
-
-    private String generateString(int numberOfWords)
-    {
-        Random rnd = new Random();
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < numberOfWords; i++)
+        for (Map.Entry<String, HashSet<Integer>> entry : concordance.entrySet())
         {
-            String name = " " + rnd.nextInt();
-            if ((i % 5) == 0)
+            HashSet<Integer> occurances = entry.getValue();
+            switch (entry.getKey())
             {
-                sb.append("\n");
+                case "one":
+                    Assert.assertTrue("too many occurances in concordance", occurances.size() == 1);
+                    Assert.assertTrue("set doesn't contain the right numbers", occurances.contains(2));
+                    break;
+                case "two":
+                    Assert.assertTrue("too many occurances in concordance", occurances.size() == 2);
+                    Assert.assertTrue("set doesn't contain the right numbers", occurances.contains(1));
+                    Assert.assertTrue("set doesn't contain the right numbers", occurances.contains(2));
+                    break;
+                case "three":
+                    Assert.assertTrue("too many occurances in concordance", occurances.size() == 2);
+                    Assert.assertTrue("set doesn't contain the right numbers", occurances.contains(1));
+                    Assert.assertTrue("set doesn't contain the right numbers", occurances.contains(2));
+                    break;
+                default:
+                    Assert.fail();
             }
-            sb.append(name + "");
         }
-
-        return sb.toString();
-    }
-
-    private void visualise(int grootte, long start)
-    {
-        long end = System.currentTimeMillis();
-        long nb_miliseconds = (end - start);
-
-        System.out.println("n = " + grootte);
-        System.out.println("time = " + nb_miliseconds + "ms");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("KK:mm:ss,SSS");
-        Date resultdate = new Date(nb_miliseconds);
-
-        System.out.println("Human readable: " + sdf.format(resultdate));
     }
 }

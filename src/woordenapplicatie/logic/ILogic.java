@@ -1,12 +1,14 @@
 package woordenapplicatie.logic;
 
+import java.util.*;
+
 public interface ILogic
 {
-    String getWordCount(String input);
+    Integer[] getWordCount(String input);
 
-    String getWordsSorted(String input);
+    TreeSet<String> getWordsSorted(String input);
 
-    String getWordFrequency(String input);
+    List<Map.Entry<String, Integer>> getWordFrequency(String input);
 
-    String getWordConcordance(String input);
+    HashMap<String, HashSet<Integer>> getWordConcordance(String input);
 }

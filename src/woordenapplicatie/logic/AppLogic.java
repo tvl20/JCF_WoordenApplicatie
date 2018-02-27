@@ -11,39 +11,30 @@ public class AppLogic implements ILogic
     }
 
     @Override
-    public String getWordCount(String input) // O(n^2)
+    public Integer[] getWordCount(String input) // O(n^2)
     {
         // O(n) for each item in the list:
         // O(n^2)
         List<String> allWords = Arrays.asList(splitString(input));
         HashSet<String> differentWords = new HashSet<>(allWords);
 
-        String output = "Totaal aantal woorden:         " + Integer.toString(allWords.size());
-        output += "\nAaantal verschillende woorden: " + Integer.toString(differentWords.size());
+        Integer[] output = {allWords.size(), differentWords.size()};
 
         return output;
     }
 
     @Override
-    public String getWordsSorted(String input) // O(2 * (n * Log(n)))
+    public TreeSet<String> getWordsSorted(String input) // O(2 * (n * Log(n)))
     {
         // O(Log(n)) for each item in the list:
         // O(n * Log(n))
         TreeSet<String> differentWords = new TreeSet<>(Arrays.asList(splitString(input)));
 
-        StringBuilder outputString = new StringBuilder();
-        // O(Log(n)) for each item in the list:
-        // O(n * Log(n))
-        for (String word : differentWords.descendingSet())
-        {
-            outputString.append(word).append("\n");
-        }
-
-        return outputString.toString();
+        return differentWords;
     }
 
     @Override
-    public String getWordFrequency(String input) // 2n^2??
+    public List<Map.Entry<String, Integer>> getWordFrequency(String input) // 2n^2
     {
         String[] allWords = splitString(input);
 
@@ -74,19 +65,11 @@ public class AppLogic implements ILogic
 
         entries.sort(Comparator.comparing(Map.Entry::getValue));
 
-        // create the output String
-        StringBuilder output = new StringBuilder();
-        for (Map.Entry<String, Integer> entry : entries)
-        {
-            output.append(entry.getKey()).append(": ");
-            output.append(entry.getValue()).append("\n");
-        }
-
-        return output.toString();
+        return entries;
     }
 
     @Override
-    public String getWordConcordance(String input)
+    public HashMap<String, HashSet<Integer>> getWordConcordance(String input)
     {
         HashMap<String, HashSet<Integer>> resultMap = new HashMap<>();
         int lineCount = 1;
@@ -131,24 +114,6 @@ public class AppLogic implements ILogic
             lineCount++;
         }
 
-        Set<String> allWords = resultMap.keySet();
-        StringBuilder outputString = new StringBuilder();
-        for (String word : allWords)
-        {
-            outputString.append(word).append(" [");
-
-            Set<Integer> lineOccurrences = resultMap.get(word);
-            for (Integer lineNumber : lineOccurrences)
-            {
-                outputString.append(lineNumber).append(",");
-            }
-
-            // This is just to remove the ',' behind the last number
-            outputString.deleteCharAt(outputString.length() - 1);
-
-            outputString.append("]\n");
-        }
-
-        return outputString.toString();
+        return resultMap;
     }
 }

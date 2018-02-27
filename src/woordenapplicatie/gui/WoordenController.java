@@ -8,8 +8,7 @@ package woordenapplicatie.gui;
 
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -70,25 +69,68 @@ public class WoordenController implements Initializable
     @FXML
     private void aantalAction(ActionEvent event)
     {
-        taOutput.setText(logic.getWordCount(taInput.getText()));
+        Integer[] wordCount = logic.getWordCount(taInput.getText());
+        String output = "Totaal aantal woorden:         " + wordCount[0];
+        output += "\nAaantal verschillende woorden: " + wordCount[1];
+        taOutput.setText(output);
     }
 
     @FXML
     private void sorteerAction(ActionEvent event)
     {
-        taOutput.setText(logic.getWordsSorted(taInput.getText()));
+        TreeSet<String> differentWords = logic.getWordsSorted(taInput.getText());
+        StringBuilder output = new StringBuilder();
+        // O(Log(n)) for each item in the list:
+        // O(n * Log(n))
+        for (String word : differentWords.descendingSet())
+        {
+            output.append(word).append("\n");
+        }
+
+        taOutput.setText(output.toString());
     }
 
     @FXML
     private void frequentieAction(ActionEvent event)
     {
-        taOutput.setText(logic.getWordFrequency(taInput.getText()));
+        List<Map.Entry<String, Integer>> entries = logic.getWordFrequency(taInput.getText());
+
+        // create the output String
+        StringBuilder output = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : entries)
+        {
+            output.append(entry.getKey()).append(": ");
+            output.append(entry.getValue()).append("\n");
+        }
+
+        taOutput.setText(output.toString());
     }
 
     @FXML
     private void concordatieAction(ActionEvent event)
     {
-        taOutput.setText(logic.getWordConcordance(taInput.getText()));
+        HashMap<String, HashSet<Integer>> resultMap = logic.getWordConcordance(taInput.getText());
+
+        Set<String> allWords = resultMap.keySet();
+        StringBuilder output = new StringBuilder();
+        for (String word : allWords)
+        {
+            output.append(word).append(" [");
+
+            Set<Integer> lineOccurrences = resultMap.get(word);
+            for (Integer lineNumber : lineOccurrences)
+            {
+                output.append(lineNumber).append(",");
+            }
+
+            // This is just to remove the ',' behind the last number
+            output.deleteCharAt(output.length() - 1);
+
+            output.append("]\n");
+        }
+
+
+        taOutput.setText(output.toString());
     }
 
 }
